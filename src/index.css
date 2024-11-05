@@ -403,8 +403,10 @@
 }
 
 .comments-section {
-  margin-top: 40px;
+  margin-top: 24px;
   text-align: left;
+  border-top: 1px solid #333333;
+  padding-top: 16px;
 }
 
 .comments-section h2 {

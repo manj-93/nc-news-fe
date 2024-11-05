@@ -4,11 +4,16 @@ import { formatDate } from "../../utils/formatting";
 
 const ArticleCard = ({ article }) => {
   const navigate = useNavigate();
-
+  
   const handleCardClick = (e) => {
     if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
       navigate(`/articles/${article.article_id}`);
     }
+  };
+
+  const handleCommentClick = (e) => {
+    e.stopPropagation();
+    navigate(`/articles/${article.article_id}?showComments=true`);
   };
 
   return (
@@ -30,13 +35,13 @@ const ArticleCard = ({ article }) => {
             </Link>
           </h3>
           <div className="article-card-topic">
-            <span className="non-clickable-text">Topic:&nbsp;</span> 
+            <span className="non-clickable-text">Topic:&nbsp;</span>
             <Link to={`/topics/${article.topic}`} className="topic-link" onClick={(e) => e.stopPropagation()}>
               {article.topic.charAt(0).toUpperCase() + article.topic.slice(1)}
             </Link>
           </div>
           <div className="article-card-metadata">
-            <span className="non-clickable-text">Posted by&nbsp;</span> 
+            <span className="non-clickable-text">Posted by&nbsp;</span>
             <Link to={`/users/${article.author}`} className="author-link" onClick={(e) => e.stopPropagation()}>
               {article.author}
             </Link> • {formatDate(article.created_at)}
@@ -54,7 +59,7 @@ const ArticleCard = ({ article }) => {
           </div>
         )}
         <div className="action-buttons">
-          <button className="action-button" onClick={(e) => e.stopPropagation()}>
+          <button className="action-button" onClick={handleCommentClick}>
             <MessageCircle size={20} /> {article.comment_count} Comments
           </button>
           <button className="action-button" onClick={(e) => e.stopPropagation()}>
