@@ -1,28 +1,38 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { getArticleById } from "../api";
+import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft, ArrowBigUp, ArrowBigDown } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
+import CommentCard from './CommentCard';
 
 const SingleArticle = () => {
   const navigate = useNavigate();
   const { article_id } = useParams()
   const [article, setArticle] = useState([])
+  const [comments, setComments] = useState([])
+  const [isLoadingComments, setIsLoadingComments] = useState(true)
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
-    getArticleById(article_id).then((articleData) => {
-      setArticle(articleData)
-      setIsLoading(false);
-    })
-    .catch((err) => {
-      console.error("Error fetching article:", err);
-      setError("Failed to load article");
-      setIsLoading(false);
-    });
-  }, [article_id])
+    getArticleById(article_id)
+      .then((articleData) => {
+        setArticle(articleData);
+        setIsLoading(false);
+        return getCommentsByArticleId(article_id);
+      })
+      .then((commentsData) => {
+        setComments(commentsData);
+        setIsLoadingComments(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching data:", err);
+        setError("Failed to load content");
+        setIsLoading(false);
+        setIsLoadingComments(false);
+      });
+  }, [article_id]);
 
   if (isLoading) {
     return (
@@ -31,7 +41,7 @@ const SingleArticle = () => {
       </div>
     );
   }
-  
+
   if (error) return <p>{error}</p>;
   if (!article) return <p>No article found</p>;
 
@@ -43,26 +53,21 @@ const SingleArticle = () => {
         </button>
         <h1>{article.title}</h1>
       </header>
-      
       <div className="article-metadata">
         Posted by <Link to={`/users/${article.author}`} className="author-link">{article.author}</Link> • {formatDate(article.created_at)}
       </div>
-
       <div className="topic-container">
         <span className="topic-label">Topic</span>
         <Link to={`/topics/${article.topic}`} className="topic-value">
           {article.topic.charAt(0).toUpperCase() + article.topic.slice(1)}
         </Link>
       </div>
-
       <div className="media-container">
         <img id='single-article-img' src={article.article_img_url} alt={article.title} />
       </div>
-
       <section className="article-content">
         <p>{article.body}</p>
       </section>
-      
       <div className="action-buttons">
         <button className="vote-button">
           <ArrowBigUp className="vote-icon-up" size={30}/>
@@ -78,8 +83,23 @@ const SingleArticle = () => {
           <Share size={20} /> Share
         </button>
       </div>
+
+      <section className="comments-section">
+        <h2>Comments ({article.comment_count})</h2>
+        {isLoadingComments ? (
+          <p>Loading comments...</p>
+        ) : comments.length > 0 ? (
+          <div className="comments-list">
+            {comments.map((comment) => (
+              <CommentCard key={comment.comment_id} comment={comment} />
+            ))}
+          </div>
+        ) : (
+          <p>No comments yet</p>
+        )}
+      </section>
     </div>
-  )
-}
+  );
+};
 
 export default SingleArticle;
