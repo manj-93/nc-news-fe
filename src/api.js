@@ -15,5 +15,14 @@ const getArticles = () => {
       });
   };
 
+  const getArticleById = (id) => {
+    return api.get(`/articles/${id}`)
+      .then((response) => response.data.article)
+      .catch((error) => {
+        console.error("Error fetching article:", error);
+        throw error;
+      });
+  };
 
-export { getArticles };
+
+export { getArticles, getArticleById };
