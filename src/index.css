@@ -14,7 +14,8 @@
 }
 
 .container {
-  max-width: 640px;
+  max-width: 756px;
+  width: 100%;
   margin: 0 auto;
   padding: 20px 24px;
   display: flex;
@@ -137,6 +138,7 @@
 
 .article-card h3:hover {
   color: rgb(104, 104, 200);
+  cursor: pointer;
 }
 
 .article-metadata {
@@ -160,13 +162,17 @@
   max-height: 512px;
   overflow: hidden;
   border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .media-container img {
   width: 100%;
   height: auto;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 10px;
+  object-position: center;
 }
 
 .action-buttons {
@@ -193,6 +199,7 @@
   transition: background-color 0.3s ease;
 }
 
+
 .action-button:hover {
   background-color: rgb(54, 54, 54);
   border-radius: 10px;
@@ -207,5 +214,40 @@
   .vote-section {
     flex-direction: column;
     gap: 4px;
+  }
+}
+
+.loading-message {
+  font-family: monospace;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #ffffff;
+  overflow: hidden;
+  border-right: 2px solid #ffffff;
+  white-space: nowrap;
+  animation:
+    typing 1.5s steps(17, end),
+    blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0
+  }
+
+  to {
+    width: 17ch
+  }
+}
+
+@keyframes blink-caret {
+
+  from,
+  to {
+    border-color: transparent
+  }
+
+  50% {
+    border-color: #ffffff
   }
 }

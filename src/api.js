@@ -16,4 +16,4 @@ const getArticles = () => {
   };
 
 
-export { getArticles};
+export { getArticles };

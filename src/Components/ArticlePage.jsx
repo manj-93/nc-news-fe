@@ -21,13 +21,19 @@ const ArticlesPage = () => {
       });
   }, []);
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+        <div className="loading-container">
+          <p className="loading-message">Loading...</p>
+        </div>
+    );
+  }
   if (error) return <p>{error}</p>;
   if (!articles.length) return <p>No articles found</p>;
 
   return (
     <main>
-      <div className="articles-container">
+      <div className="container">
       <h1>Articles</h1>
         {articles.map((article) => (
           <ArticleCard key={article.article_id} article={article} />

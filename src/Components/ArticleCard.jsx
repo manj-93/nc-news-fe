@@ -1,4 +1,4 @@
-import { ArrowBigUp, ArrowBigDown } from 'lucide-react';
+import { ArrowBigUp, ArrowBigDown, Share, MessageCircle } from 'lucide-react';
 
 
 
@@ -7,11 +7,11 @@ const ArticleCard = ({ article }) => {
       <article className="article-card">
         <div className="vote-section">
           <button className="vote-button">
-            <ArrowBigUp className="vote-icon-up" size={24} strokeWidth={2} />
+            <ArrowBigUp className="vote-icon-up" size={30}/>
           </button>
           <span className="vote-count">{article.votes}</span>
           <button className="vote-button">
-            <ArrowBigDown className="vote-icon-down" size={24} strokeWidth={2}/>
+            <ArrowBigDown className="vote-icon-down" size={30}/>
           </button>
         </div>
         <div className="content-section">
@@ -30,12 +30,14 @@ const ArticleCard = ({ article }) => {
               />
             </div>
           )}
-          <div className="action-buttons">
+        <div className="action-buttons">
             <button className="action-button">
-              💬 {article.comment_count} Comments
+              <MessageCircle size={20} /> {article.comment_count} Comments
             </button>
-            <button className="action-button">↗️ Share</button>
-          </div>
+            <button className="action-button">
+              <Share size={20} /> Share
+            </button>
+            </div>
         </div>
       </article>
   );
