@@ -13,26 +13,41 @@ const SingleArticle = () => {
   const [isLoadingComments, setIsLoadingComments] = useState(true)
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [showComments, setShowComments] = useState(false);
+  
   useEffect(() => {
     setIsLoading(true);
     getArticleById(article_id)
       .then((articleData) => {
         setArticle(articleData);
         setIsLoading(false);
-        return getCommentsByArticleId(article_id);
-      })
-      .then((commentsData) => {
-        setComments(commentsData);
-        setIsLoadingComments(false);
       })
       .catch((err) => {
         console.error("Error fetching data:", err);
         setError("Failed to load content");
         setIsLoading(false);
-        setIsLoadingComments(false);
       });
   }, [article_id]);
+
+  useEffect(() => {
+    if (showComments) {
+      setIsLoadingComments(true);
+      getCommentsByArticleId(article_id)
+        .then((commentsData) => {
+          setComments(commentsData);
+          setIsLoadingComments(false);
+        })
+        .catch((err) => {
+          console.error("Error fetching comments:", err);
+          setError("Failed to load comments");
+          setIsLoadingComments(false);
+        });
+    }
+  }, [showComments, article_id]);
+
+  const handleCommentsClick = () => {
+    setShowComments(!showComments);
+  };
 
   if (isLoading) {
     return (
@@ -76,7 +91,10 @@ const SingleArticle = () => {
         <button className="vote-button">
           <ArrowBigDown className="vote-icon-down" size={30}/>
         </button>
-        <button className="action-button">
+        <button 
+          className={`action-button ${showComments ? 'active' : ''}`}
+          onClick={handleCommentsClick}
+        >
           <MessageCircle size={20} /> {article.comment_count} Comments
         </button>
         <button className="action-button">
@@ -84,20 +102,22 @@ const SingleArticle = () => {
         </button>
       </div>
 
-      <section className="comments-section">
-        <h2>Comments ({article.comment_count})</h2>
-        {isLoadingComments ? (
-          <p>Loading comments...</p>
-        ) : comments.length > 0 ? (
-          <div className="comments-list">
-            {comments.map((comment) => (
-              <CommentCard key={comment.comment_id} comment={comment} />
-            ))}
-          </div>
-        ) : (
-          <p>No comments yet</p>
-        )}
-      </section>
+      {showComments && (
+        <section className="comments-section">
+          <h2>Comments ({article.comment_count})</h2>
+          {isLoadingComments ? (
+            <p>Loading comments...</p>
+          ) : comments.length > 0 ? (
+            <div className="comments-list">
+              {comments.map((comment) => (
+                <CommentCard key={comment.comment_id} comment={comment} />
+              ))}
+            </div>
+          ) : (
+            <p>No comments yet</p>
+          )}
+        </section>
+      )}
     </div>
   );
 };
