@@ -108,6 +108,30 @@
   text-align: left;
 }
 
+.single-article .vote-section {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: px 4px;
+  width: auto;
+  border-left: none;
+}
+
+.single-article .action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.sticky-actions {
+  position: sticky;
+  top: 0;
+  background: rgb(0, 0, 0);
+  padding: 10px 0;
+  border-bottom: 1px solid #000000;
+  z-index: 10;
+}
 
 .content-section {
   flex-grow: 1;
@@ -261,7 +285,7 @@
   font-family: 'Reddit Sans';
   font-size: 16px;
   font-weight: 1000;
-  color: #a1a0a0;
+  color: #878a8c;
   margin: 0;
   text-align: center;
   cursor: text;

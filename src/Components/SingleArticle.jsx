@@ -1,23 +1,24 @@
-import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getArticleById, getCommentsByArticleId } from "../api";
-import { Share, MessageCircle, ArrowLeft, ArrowBigUp, ArrowBigDown } from 'lucide-react';
+import { Share, MessageCircle, ArrowLeft } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
 import CommentCard from './CommentCard';
+import VoteButtons from './VoteButtons'; // Import the VoteButtons component
 
 const SingleArticle = () => {
-  const navigate = useNavigate();
   const { article_id } = useParams();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const showCommentsParam = searchParams.get('showComments');
+  const showCommentsInitially = searchParams.get('showComments') === 'true';
   
-  const [article, setArticle] = useState([])
-  const [comments, setComments] = useState([])
-  const [isLoadingComments, setIsLoadingComments] = useState(true)
+  const [article, setArticle] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [isLoadingComments, setIsLoadingComments] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showComments, setShowComments] = useState(showCommentsParam === 'true');
-  
+  const [commentsVisible, setCommentsVisible] = useState(showCommentsInitially);
+
   useEffect(() => {
     setIsLoading(true);
     getArticleById(article_id)
@@ -33,7 +34,7 @@ const SingleArticle = () => {
   }, [article_id]);
 
   useEffect(() => {
-    if (showComments) {
+    if (commentsVisible) {
       setIsLoadingComments(true);
       getCommentsByArticleId(article_id)
         .then((commentsData) => {
@@ -46,31 +47,11 @@ const SingleArticle = () => {
           setIsLoadingComments(false);
         });
     }
-  }, [showComments, article_id]);
+  }, [commentsVisible, article_id]);
 
-  const handleCommentsClick = () => {
-    setShowComments(!showComments);
-
-    const newSearchParams = new URLSearchParams(searchParams);
-    if (!showComments) {
-      newSearchParams.set('showComments', 'true');
-    } else {
-      newSearchParams.delete('showComments');
-    }
-    navigate(`?${newSearchParams.toString()}`, { replace: true });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <p className="loading-message">Loading...</p>
-      </div>
-    );
-  }
-
+  if (isLoading) return <div className="loading-container"><p className="loading-message">Loading...</p></div>;
   if (error) return <p>{error}</p>;
   if (!article) return <p>No article found</p>;
-
 
   return (
     <div className="single-article">
@@ -95,17 +76,14 @@ const SingleArticle = () => {
       <section className="article-content">
         <p>{article.body}</p>
       </section>
-      <div className="action-buttons">
-        <button className="vote-button">
-          <ArrowBigUp className="vote-icon-up" size={30}/>
-        </button>
-        <span className="vote-count">{article.votes}</span>
-        <button className="vote-button">
-          <ArrowBigDown className="vote-icon-down" size={30}/>
-        </button>
+      <div className="action-buttons sticky-actions">
+        <VoteButtons 
+          articleId={article_id}
+          initialVotes={article.votes}
+        />
         <button 
-          className={`action-button ${showComments ? 'active' : ''}`}
-          onClick={handleCommentsClick}
+          className={`action-button ${commentsVisible ? 'active' : ''}`} 
+          onClick={() => setCommentsVisible(!commentsVisible)}
         >
           <MessageCircle size={20} /> {article.comment_count} Comments
         </button>
@@ -114,7 +92,7 @@ const SingleArticle = () => {
         </button>
       </div>
 
-      {showComments && (
+      {commentsVisible && (
         <section className="comments-section">
           <h2>Comments ({article.comment_count})</h2>
           {isLoadingComments ? (
