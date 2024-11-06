@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft, ArrowBigUp, ArrowBigDown } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
@@ -7,13 +7,16 @@ import CommentCard from './CommentCard';
 
 const SingleArticle = () => {
   const navigate = useNavigate();
-  const { article_id } = useParams()
+  const { article_id } = useParams();
+  const [searchParams] = useSearchParams();
+  const showCommentsParam = searchParams.get('showComments');
+  
   const [article, setArticle] = useState([])
   const [comments, setComments] = useState([])
   const [isLoadingComments, setIsLoadingComments] = useState(true)
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showComments, setShowComments] = useState(false);
+  const [showComments, setShowComments] = useState(showCommentsParam === 'true');
   
   useEffect(() => {
     setIsLoading(true);
@@ -47,6 +50,14 @@ const SingleArticle = () => {
 
   const handleCommentsClick = () => {
     setShowComments(!showComments);
+
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (!showComments) {
+      newSearchParams.set('showComments', 'true');
+    } else {
+      newSearchParams.delete('showComments');
+    }
+    navigate(`?${newSearchParams.toString()}`, { replace: true });
   };
 
   if (isLoading) {
@@ -59,6 +70,7 @@ const SingleArticle = () => {
 
   if (error) return <p>{error}</p>;
   if (!article) return <p>No article found</p>;
+
 
   return (
     <div className="single-article">
