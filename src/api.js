@@ -24,5 +24,14 @@ const getArticles = () => {
       });
   };
 
+  const getCommentsByArticleId = (id) => {
+    return api.get(`/articles/${id}/comments`).then ((response)=>{
+      return response.data.comments
+    })
+    .catch((error)=>{
+      console.error("Error fetching comments:", error);
+      throw error;
+    })
+  }
 
-export { getArticles, getArticleById };
+export { getArticles, getArticleById, getCommentsByArticleId };

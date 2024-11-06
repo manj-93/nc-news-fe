@@ -339,7 +339,7 @@
   white-space: nowrap;
   animation:
     typing 1.5s steps(10, end),
-    blink-caret 0.75s step-end infinite;
+    blink-caret 0.75s step-end;
 }
 
 @keyframes typing {
@@ -400,4 +400,58 @@
   color: rgb(104, 104, 200);
   transform: scale(1.1);
   background-color: #444444;
+}
+
+.comments-section {
+  margin-top: 40px;
+  text-align: left;
+}
+
+.comments-section h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 20px;
+}
+
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.comment-card {
+  padding: 16px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  border: 1px solid #333333;
+}
+
+.comment-metadata {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: rgb(104, 104, 200);
+}
+
+.comment-date {
+  color: #787c7e;
+}
+
+.comment-body {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+.comment-votes {
+  color: #787c7e;
+  font-size: 14px;
 }
