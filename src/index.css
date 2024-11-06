@@ -219,6 +219,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   padding: 4px 4px;
   width: 40px;
@@ -226,6 +227,7 @@
 }
 
 .vote-button {
+  display: flex;
   background: none;
   border: none;
   padding: 0;
@@ -263,6 +265,7 @@
   margin: 0;
   text-align: center;
   cursor: text;
+  display: flex;
 }
 
 

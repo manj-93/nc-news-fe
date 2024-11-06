@@ -5,33 +5,43 @@ const api = axios.create({
 });
 
 const getArticles = () => {
-    return api.get('/articles')
-      .then((response) => {
-        return response.data.articles;
-      })
-      .catch((error) => {
-        console.error("Error fetching items:", error);
-        throw error;
-      });
-  };
-
-  const getArticleById = (id) => {
-    return api.get(`/articles/${id}`)
-      .then((response) => response.data.article)
-      .catch((error) => {
-        console.error("Error fetching article:", error);
-        throw error;
-      });
-  };
-
-  const getCommentsByArticleId = (id) => {
-    return api.get(`/articles/${id}/comments`).then ((response)=>{
-      return response.data.comments
+  return api.get('/articles')
+    .then((response) => {
+      return response.data.articles;
     })
-    .catch((error)=>{
-      console.error("Error fetching comments:", error);
+    .catch((error) => {
+      console.error("Error fetching articles:", error);
       throw error;
-    })
-  }
+    });
+};
 
-export { getArticles, getArticleById, getCommentsByArticleId };
+const getArticleById = (id) => {
+  return api.get(`/articles/${id}`)
+    .then((response) => response.data.article)
+    .catch((error) => {
+      console.error("Error fetching article:", error);
+      throw error;
+    });
+};
+
+const getCommentsByArticleId = (id) => {
+  return api.get(`/articles/${id}/comments`)
+    .then((response) => {
+      return response.data.comments;
+    });
+};
+
+const updateArticleVotes = (article_id, voteChange) => {
+  return api.patch(`/articles/${article_id}`, {
+    inc_votes: voteChange
+  })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      console.error('Error updating votes:', error);
+      throw error;
+    });
+};
+
+export { getArticles, getArticleById, getCommentsByArticleId, updateArticleVotes };
