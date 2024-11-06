@@ -28,10 +28,19 @@ const getArticles = () => {
     return api.get(`/articles/${id}/comments`).then ((response)=>{
       return response.data.comments
     })
-    .catch((error)=>{
-      console.error("Error fetching comments:", error);
-      throw error;
-    })
   }
 
-export { getArticles, getArticleById, getCommentsByArticleId };
+  const updateArticleVotes = (article_id, voteChange) => {
+    return axios.patch(`${API_URL}/articles/${article_id}/vote`, {
+      voteChange: voteChange,
+    })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
+      console.error('Error updating votes:', error);
+      throw error;
+    });
+  };
+
+export { getArticles, getArticleById, getCommentsByArticleId, updateArticleVotes };
