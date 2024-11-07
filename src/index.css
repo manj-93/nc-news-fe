@@ -562,9 +562,122 @@
 .success-message {
   padding: 12px;
   margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.post-success {
   background-color: rgba(34, 197, 94, 0.1);
   border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #fcfffd;
+}
+
+.delete-success {
+  background-color: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.3);
+  color: #fffdfd;
+}
+
+.delete-comment-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: transparent;
+  border: 1px solid #ef4444;
   border-radius: 4px;
-  color: #22c55e;
+  color: #ef4444;
   font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover:not(:disabled) {
+  background-color: #ef4444;
+  color: white;
+}
+
+.delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-button svg {
+  transition: transform 0.2s ease;
+}
+
+.delete-button:hover:not(:disabled) svg {
+  transform: scale(1.1);
+}
+
+.error-message {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  background-color: #ef4444;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.comment-deleted {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  animation: fadeOut 1.5s ease forwards;
+}
+
+.comment-deleted p {
+  color: #ef4444;
+  text-align: center;
+  font-weight: 500;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.delete-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background-color: transparent;
+  border: 1px solid #ef4444;
+  border-radius: 4px;
+  color: #ef4444;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.delete-button:hover:not(:disabled) {
+  background-color: #ef4444;
+  color: white;
+}
+
+.delete-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

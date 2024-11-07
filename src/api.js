@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AppWindowIcon } from 'lucide-react';
 
 const api = axios.create({
   baseURL: 'https://be-nc-news-fhnz.onrender.com/api'
@@ -36,9 +37,18 @@ const postComment = (article_id, commentText) => {
       return response.data.comment;
     })
     .catch((error) => {
-      console.error('API Error:', error);
       throw error;
     });
+};
+
+const deleteComment = (commentId) => {
+  return api.delete(`/comments/${commentId}`)
+  .then((response) => {
+    return response.data
+  })
+  .catch((error)=>{
+    throw error;
+  });
 };
 
 const getCommentsByArticleId = (article_id) => {
@@ -61,4 +71,4 @@ const updateArticleVotes = (article_id, voteChange) => {
     });
 };
 
-export { getArticles, getArticleById, postComment, getCommentsByArticleId, updateArticleVotes };
+export { getArticles, getArticleById, postComment, getCommentsByArticleId, updateArticleVotes, deleteComment };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useSearchParams } from 'react-router-dom';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
@@ -11,6 +11,7 @@ const SingleArticle = () => {
   const { article_id } = useParams();
   const [searchParams] = useSearchParams();
   const showCommentsInitially = searchParams.get('showComments') === 'true';
+  const navigate = useNavigate();
   
   const [article, setArticle] = useState(null);
   const [comments, setComments] = useState([]);
@@ -71,6 +72,17 @@ const SingleArticle = () => {
         }
     };
     
+    const handleCommentDeleted = (deletedCommentId) => {
+        setComments(prevComments =>
+            prevComments.filter(comment => comment.comment_id !== deletedCommentId)
+        );
+        setArticle(prevArticle => ({
+            ...prevArticle,
+            comment_count: prevArticle.comment_count -1
+        }))
+    }
+
+
     if (isLoading) return <div className="loading-container"><p className="loading-message">Loading...</p></div>;
     if (error) return <p>{error}</p>;
     if (!article) return <p>No article found</p>;
@@ -126,7 +138,9 @@ const SingleArticle = () => {
           ) : comments.length > 0 ? (
             <div className="comments-list">
               {comments.map((comment) => (
-                <CommentCard key={comment.comment_id} comment={comment} />
+                <CommentCard key={comment.comment_id} 
+                comment={comment}
+                onCommentDeleted={handleCommentDeleted} />
               ))}
             </div>
           ) : (
