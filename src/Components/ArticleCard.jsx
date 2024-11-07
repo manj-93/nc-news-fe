@@ -1,27 +1,17 @@
-import { ArrowBigUp, ArrowBigDown, Share, MessageCircle } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Share, MessageCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { formatDate } from "../../utils/formatting";
+import VoteButtons from "./VoteButtons";
+import ArticleNavigation from './ArticleNavigation';
 
 const ArticleCard = ({ article }) => {
-  const navigate = useNavigate();
 
-  const handleCardClick = (e) => {
-    if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
-      navigate(`/articles/${article.article_id}`);
-    }
-  };
+  const { handleCardClick, handleCommentClick } = ArticleNavigation(article.article_id)
 
   return (
-    <section className="article-card" onClick={handleCardClick}>
-      <div className="vote-section">
-        <button className="vote-button">
-          <ArrowBigUp className="vote-icon-up" size={30} />
-        </button>
-        <span className="vote-count">{article.votes}</span>
-        <button className="vote-button">
-          <ArrowBigDown className="vote-icon-down" size={30} />
-        </button>
-      </div>
+    <section className="article-card" onClick={handleCardClick} role="article">
+      <VoteButtons articleId={article.article_id} initialVotes={article.votes} />
+
       <div className="content-section">
         <div className="text-content">
           <h3>
@@ -30,13 +20,13 @@ const ArticleCard = ({ article }) => {
             </Link>
           </h3>
           <div className="article-card-topic">
-            <span className="non-clickable-text">Topic:&nbsp;</span> 
+            <span className="non-clickable-text">Topic:&nbsp;</span>
             <Link to={`/topics/${article.topic}`} className="topic-link" onClick={(e) => e.stopPropagation()}>
               {article.topic.charAt(0).toUpperCase() + article.topic.slice(1)}
             </Link>
           </div>
           <div className="article-card-metadata">
-            <span className="non-clickable-text">Posted by&nbsp;</span> 
+            <span className="non-clickable-text">Posted by&nbsp;</span>
             <Link to={`/users/${article.author}`} className="author-link" onClick={(e) => e.stopPropagation()}>
               {article.author}
             </Link> • {formatDate(article.created_at)}
@@ -54,7 +44,7 @@ const ArticleCard = ({ article }) => {
           </div>
         )}
         <div className="action-buttons">
-          <button className="action-button" onClick={(e) => e.stopPropagation()}>
+          <button className="action-button" onClick={handleCommentClick}>
             <MessageCircle size={20} /> {article.comment_count} Comments
           </button>
           <button className="action-button" onClick={(e) => e.stopPropagation()}>

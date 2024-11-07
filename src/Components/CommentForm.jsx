@@ -20,7 +20,7 @@ const CommentForm = ({ articleId, onCommentPosted }) => {
     setSuccessMessage('');
 
     postComment(articleId, comment.trim())
-      .then((newComment) => {
+      .then(() => {
         setComment('');
         setSuccessMessage('Comment posted successfully');
         if (onCommentPosted) {
@@ -48,7 +48,7 @@ const CommentForm = ({ articleId, onCommentPosted }) => {
       )}
       
       {successMessage && (
-        <div className="success-message">
+        <div className="success-message post-success">
           {successMessage}
         </div>
       )}
