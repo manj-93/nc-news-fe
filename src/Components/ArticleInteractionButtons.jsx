@@ -1,6 +1,6 @@
 import { Share, MessageCircle } from 'lucide-react';
 
-const ActionButtons = ({ onCommentClick, commentCount }) => (
+const ArticleInteractionButtons = ({ onCommentClick, commentCount }) => (
     <div className="action-buttons">
       <button 
         className="action-button"
@@ -21,4 +21,4 @@ const ActionButtons = ({ onCommentClick, commentCount }) => (
     </div>
   );
 
-  export default ActionButtons;
+  export default ArticleInteractionButtons;

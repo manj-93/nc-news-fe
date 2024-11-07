@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
 import CommentCard from './CommentCard';
-import VoteButtons from './VoteButtons';
+import VoteButtons from './VoteButtons'; 
+import CommentForm from './CommentForm';
 
 const SingleArticle = () => {
   const { article_id } = useParams();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const showCommentsInitially = searchParams.get('showComments') === 'true';
   
@@ -49,9 +49,31 @@ const SingleArticle = () => {
     }
   }, [commentsVisible, article_id]);
 
-  if (isLoading) return <div className="loading-container"><p className="loading-message">Loading...</p></div>;
-  if (error) return <p>{error}</p>;
-  if (!article) return <p>No article found</p>;
+  
+  const handleCommentPosted = () => {
+      if (commentsVisible) {
+          setIsLoadingComments(true);
+          getCommentsByArticleId(article_id)
+          .then((commentsData) => {
+              setComments(commentsData);
+              setArticle(prevArticle => ({
+                  ...prevArticle,
+                  comment_count: prevArticle.comment_count + 1
+                }));
+            })
+            .catch((err) => {
+                console.error("Error fetching comments:", err);
+                setError("Failed to load comments");
+            })
+            .finally(() => {
+                setIsLoadingComments(false);
+            });
+        }
+    };
+    
+    if (isLoading) return <div className="loading-container"><p className="loading-message">Loading...</p></div>;
+    if (error) return <p>{error}</p>;
+    if (!article) return <p>No article found</p>;
 
   return (
     <div className="single-article">
@@ -95,6 +117,10 @@ const SingleArticle = () => {
       {commentsVisible && (
         <section className="comments-section">
           <h2>Comments ({article.comment_count})</h2>
+          <CommentForm 
+          articleId = {article_id}
+          onCommentPosted = {handleCommentPosted}
+          />
           {isLoadingComments ? (
             <p>Loading comments...</p>
           ) : comments.length > 0 ? (

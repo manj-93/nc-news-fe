@@ -1,46 +1,24 @@
 import { ArrowBigUp, ArrowBigDown, Share, MessageCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { formatDate } from "../../utils/formatting";
-import { updateArticleVotes } from "../api";
-import { useState } from 'react';
 
 const ArticleCard = ({ article }) => {
   const navigate = useNavigate();
-  const [votes, setVotes] = useState(article.votes);
-  const [voteError, setVoteError] = useState(null);
-
-  const handleVote = (e, voteChange) => {
-    e.stopPropagation();
-    setVoteError(null);
-    
-    setVotes((prevVotes) => prevVotes + voteChange);
-    updateArticleVotes(article.article_id, voteChange)
-      .catch((err) => {
-        console.error('Vote update failed:', err);
-        setVotes((prevVotes) => prevVotes - voteChange);
-        setVoteError(voteChange > 0 ? "Failed to upvote article" : "Failed to downvote article");
-      });
-  };
 
   const handleCardClick = (e) => {
-    if (!e.target.closest('a, button')) {
+    if (e.target.tagName !== 'A' && e.target.tagName !== 'BUTTON') {
       navigate(`/articles/${article.article_id}`);
     }
   };
 
-  const handleCommentClick = (e) => {
-    e.stopPropagation();
-    navigate(`/articles/${article.article_id}?showComments=true`);
-  };
-
   return (
-    <section className="article-card" onClick={handleCardClick} role="article">
+    <section className="article-card" onClick={handleCardClick}>
       <div className="vote-section">
-        <button className="vote-button" onClick={(e) => handleVote(e, 1)}>
+        <button className="vote-button">
           <ArrowBigUp className="vote-icon-up" size={30} />
         </button>
-        <span className="vote-count">{votes}</span>
-        <button className="vote-button" onClick={(e) => handleVote(e, -1)}>
+        <span className="vote-count">{article.votes}</span>
+        <button className="vote-button">
           <ArrowBigDown className="vote-icon-down" size={30} />
         </button>
       </div>
@@ -52,13 +30,13 @@ const ArticleCard = ({ article }) => {
             </Link>
           </h3>
           <div className="article-card-topic">
-            <span className="non-clickable-text">Topic:&nbsp;</span>
+            <span className="non-clickable-text">Topic:&nbsp;</span> 
             <Link to={`/topics/${article.topic}`} className="topic-link" onClick={(e) => e.stopPropagation()}>
               {article.topic.charAt(0).toUpperCase() + article.topic.slice(1)}
             </Link>
           </div>
           <div className="article-card-metadata">
-            <span className="non-clickable-text">Posted by&nbsp;</span>
+            <span className="non-clickable-text">Posted by&nbsp;</span> 
             <Link to={`/users/${article.author}`} className="author-link" onClick={(e) => e.stopPropagation()}>
               {article.author}
             </Link> • {formatDate(article.created_at)}
@@ -76,7 +54,7 @@ const ArticleCard = ({ article }) => {
           </div>
         )}
         <div className="action-buttons">
-          <button className="action-button" onClick={handleCommentClick}>
+          <button className="action-button" onClick={(e) => e.stopPropagation()}>
             <MessageCircle size={20} /> {article.comment_count} Comments
           </button>
           <button className="action-button" onClick={(e) => e.stopPropagation()}>

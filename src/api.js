@@ -15,8 +15,8 @@ const getArticles = () => {
     });
 };
 
-const getArticleById = (id) => {
-  return api.get(`/articles/${id}`)
+const getArticleById = (article_id) => {
+  return api.get(`/articles/${article_id}`)
     .then((response) => response.data.article)
     .catch((error) => {
       console.error("Error fetching article:", error);
@@ -24,8 +24,25 @@ const getArticleById = (id) => {
     });
 };
 
-const getCommentsByArticleId = (id) => {
-  return api.get(`/articles/${id}/comments`)
+const postComment = (article_id, commentText) => {
+  return api.post(`/articles/${article_id}/comments`, {
+    username: 'jessjelly', 
+    body: commentText
+  })
+    .then((response) => {
+      if (!response.data.comment) {
+        throw new Error('No comment data received');
+      }
+      return response.data.comment;
+    })
+    .catch((error) => {
+      console.error('API Error:', error);
+      throw error;
+    });
+};
+
+const getCommentsByArticleId = (article_id) => {
+  return api.get(`/articles/${article_id}/comments`)
     .then((response) => {
       return response.data.comments;
     });
@@ -44,4 +61,4 @@ const updateArticleVotes = (article_id, voteChange) => {
     });
 };
 
-export { getArticles, getArticleById, getCommentsByArticleId, updateArticleVotes };
+export { getArticles, getArticleById, postComment, getCommentsByArticleId, updateArticleVotes };
