@@ -4,7 +4,7 @@ import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft } from 'lucide-react';
 import { formatDate } from '../../utils/formatting';
 import CommentCard from './CommentCard';
-import VoteButtons from './VoteButtons'; // Import the VoteButtons component
+import VoteButtons from './VoteButtons';
 
 const SingleArticle = () => {
   const { article_id } = useParams();
