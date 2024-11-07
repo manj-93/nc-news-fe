@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getArticles } from "../api";
 import ArticleCard from "./ArticleCard";
-
+import BackButton from "./Backbutton";
 
 const ArticlesPage = () => {
   const [articles, setArticles] = useState([]);
@@ -36,7 +36,10 @@ const ArticlesPage = () => {
   return (
     <main>
       <div className="container">
-      <h1>Articles</h1>
+        <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+          <BackButton />
+          <h1>Articles</h1>
+        </div>
         {articles.map((article) => (
           <ArticleCard key={article.article_id} article={article} />
         ))}

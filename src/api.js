@@ -1,34 +1,31 @@
 import axios from 'axios';
-import { AppWindowIcon } from 'lucide-react';
 
-const api = axios.create({
-  baseURL: 'https://be-nc-news-fhnz.onrender.com/api'
+export const api = axios.create({
+  baseURL: 'https://be-nc-news-fhnz.onrender.com/api',
 });
 
-const getArticles = () => {
+export const getArticles = () => {
   return api.get('/articles')
     .then((response) => {
       return response.data.articles;
     })
     .catch((error) => {
-      console.error("Error fetching articles:", error);
       throw error;
     });
 };
 
-const getArticleById = (article_id) => {
+export const getArticleById = (article_id) => {
   return api.get(`/articles/${article_id}`)
     .then((response) => response.data.article)
     .catch((error) => {
-      console.error("Error fetching article:", error);
       throw error;
     });
 };
 
-const postComment = (article_id, commentText) => {
+export const postComment = (article_id, commentText) => {
   return api.post(`/articles/${article_id}/comments`, {
     username: 'jessjelly', 
-    body: commentText
+    body: commentText,
   })
     .then((response) => {
       if (!response.data.comment) {
@@ -41,34 +38,52 @@ const postComment = (article_id, commentText) => {
     });
 };
 
-const deleteComment = (commentId) => {
+export const deleteComment = (commentId) => {
   return api.delete(`/comments/${commentId}`)
-  .then((response) => {
-    return response.data
-  })
-  .catch((error)=>{
-    throw error;
-  });
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      throw error;
+    });
 };
 
-const getCommentsByArticleId = (article_id) => {
+export const getCommentsByArticleId = (article_id) => {
   return api.get(`/articles/${article_id}/comments`)
     .then((response) => {
       return response.data.comments;
     });
 };
 
-const updateArticleVotes = (article_id, voteChange) => {
+export const updateArticleVotes = (article_id, voteChange) => {
   return api.patch(`/articles/${article_id}`, {
-    inc_votes: voteChange
+    inc_votes: voteChange,
   })
-    .then(response => {
+    .then((response) => {
       return response.data;
     })
-    .catch(error => {
-      console.error('Error updating votes:', error);
+    .catch((error) => {
       throw error;
     });
 };
 
-export { getArticles, getArticleById, postComment, getCommentsByArticleId, updateArticleVotes, deleteComment };
+export const fetchTopics = () => {
+  return api.get('/topics') 
+    .then((response) => {
+      console.log('Fetched topics:', response.data.topics);
+      return response.data.topics;
+    })
+    .catch((error) => {
+      console.error('Error fetching topics:', error);
+      throw error;
+    });
+};
+
+export const fetchArticlesByTopic = (slug) => {
+  return api.get(`/articles?topic=${slug}`)
+    .then((response) => response.data.articles)
+    .catch((error) => {
+      console.error('Error fetching articles for topic:', error);
+      throw error;
+    });
+};

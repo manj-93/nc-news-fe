@@ -4,14 +4,12 @@ import { formatDate } from "../../utils/formatting";
 import VoteButtons from "./VoteButtons";
 import ArticleNavigation from './ArticleNavigation';
 
-const ArticleCard = ({ article }) => {
-
-  const { handleCardClick, handleCommentClick } = ArticleNavigation(article.article_id)
+const ArticleCard = ({ article, className = '' }) => {
+  const { handleCardClick, handleCommentClick } = ArticleNavigation(article.article_id);
 
   return (
-    <section className="article-card" onClick={handleCardClick} role="article">
+    <section className={`article-card ${className}`} onClick={handleCardClick} role="article">
       <VoteButtons articleId={article.article_id} initialVotes={article.votes} />
-
       <div className="content-section">
         <div className="text-content">
           <h3>
