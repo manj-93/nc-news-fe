@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { getArticleById, getCommentsByArticleId } from "../api";
 import { Share, MessageCircle, ArrowLeft } from 'lucide-react';
-import { formatDate } from '../../utils/formatting';
+import { formatDate } from '../../utils/formatDate.js';
 import CommentCard from './CommentCard';
 import VoteButtons from './VoteButtons'; 
 import CommentForm from './CommentForm';
+import Error from './ErrorHandling.jsx';
 
 const SingleArticle = () => {
   const { article_id } = useParams();
@@ -28,8 +29,11 @@ const SingleArticle = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.error("Error fetching data:", err);
-        setError("Failed to load content");
+        console.log('Error object:', err);
+        setError({
+          status: err.status,
+          message: err.message
+        });
         setIsLoading(false);
       });
   }, [article_id]);
@@ -44,7 +48,7 @@ const SingleArticle = () => {
         })
         .catch((err) => {
           console.error("Error fetching comments:", err);
-          setError("Failed to load comments");
+          setError(err.msg);
           setIsLoadingComments(false);
         });
     }
@@ -64,7 +68,7 @@ const SingleArticle = () => {
             })
             .catch((err) => {
                 console.error("Error fetching comments:", err);
-                setError("Failed to load comments");
+                setError(err.msg);
             })
             .finally(() => {
                 setIsLoadingComments(false);
@@ -84,7 +88,9 @@ const SingleArticle = () => {
 
 
     if (isLoading) return <div className="loading-container"><p className="loading-message">Loading...</p></div>;
-    if (error) return <p>{error}</p>;
+    if (error) {
+      return <Error status={error.status} message={error.message} />;
+    }
     if (!article) return <p>No article found</p>;
 
   return (

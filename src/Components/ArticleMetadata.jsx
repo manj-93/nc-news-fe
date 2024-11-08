@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { formatDate } from "../../utils/formatting";
+import { formatDate } from "../../utils/formatDate.js";
 
 const ArticleMetadata = ({ topic, author, date }) => (
   <>
