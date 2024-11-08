@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchTopics } from '../api';
 import { Link } from 'react-router-dom';
 import BackButton from './BackButton';
+import Error from './ErrorHandling';
 
 const TopicsList = () => {
   const [topics, setTopics] = useState([]);
@@ -17,14 +18,16 @@ const TopicsList = () => {
         setLoading(false);
       })
       .catch((err) => {
-        setError('Failed to load topics');
+        setError(err.msg);
         console.error(err);
         setLoading(false);
       });
   }, []);
 
   if (loading) return <p>Loading topics...</p>;
-  if (error) return <p>{error}</p>;
+  if (error) {
+    return <Error status={error.status} message={error.msg} />;
+  }
 
   return (
     <main>

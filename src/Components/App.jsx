@@ -1,21 +1,23 @@
 import { Routes, Route } from 'react-router-dom';
 import Header from './Header';
-import ArticlesPage from './ArticlePage';
+import ArticlesPage from './ArticlesPage';
 import SingleArticle from './SingleArticle';
 import TopicPage from './TopicsPage';
 import TopicsList from './TopicsList'; 
-import ErrorPage from './ErrorPage';
+import Error from './ErrorHandling';
+import HomePage from './HomePage';
 
 const App = () => {
   return (
     <>
       <Header />
       <Routes>
+        <Route path="*" element={<Error status={404} message="Page not found" />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/articles" element={<ArticlesPage />} />
         <Route path="/articles/:article_id" element={<SingleArticle />} />
         <Route path="/topics" element={<TopicsList />} />
         <Route path="/topics/:slug" element={<TopicPage />} />
-        <Route path="*" element={<ErrorPage message="Page not found" status={404} />} />
       </Routes>
     </>
   );

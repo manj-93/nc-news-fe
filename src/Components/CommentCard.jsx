@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { formatDate } from "../../utils/formatting";
+import { formatDate } from "../../utils/formatDate.js";
 import DeleteComment from "./DeleteComment";
 
 const CommentCard = ({ comment, onCommentDeleted }) => {

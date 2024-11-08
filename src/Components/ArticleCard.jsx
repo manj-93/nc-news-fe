@@ -1,6 +1,6 @@
 import { Share, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { formatDate } from "../../utils/formatting";
+import { formatDate } from "../../utils/formatDate.js";
 import VoteButtons from "./VoteButtons";
 import ArticleNavigation from './ArticleNavigation';
 
