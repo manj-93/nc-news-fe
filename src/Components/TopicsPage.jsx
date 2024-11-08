@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { fetchArticlesByTopic } from '../api'; 
 import ArticleCard from './ArticleCard';
-import BackButton from './Backbutton';
+import BackButton from './BackButton';
 
 const TopicsPage = () => {
   const { slug } = useParams(); 
@@ -33,8 +33,10 @@ const TopicsPage = () => {
     <main>
       <div className="container">
         <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+          <div className="header-left">
           <BackButton />
           <h2>Articles on {slug.charAt(0).toUpperCase() + slug.slice(1)}</h2>
+        </div>
         </div>
         {articles.length > 0 ? (
           articles.map((article) => (
