@@ -5,7 +5,7 @@ import ArticleCard from './ArticleCard';
 import BackButton from './BackButton';
 
 const TopicsPage = () => {
-  const { slug } = useParams(); 
+  const { slug } = useParams();
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,39 +15,37 @@ const TopicsPage = () => {
     setError(null);
     fetchArticlesByTopic(slug)
       .then((data) => {
-        console.log("Fetched articles:", data); 
         setArticles(data);
         setLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching articles:', error);
-        setError('Failed to load articles');
+        if (error.response?.status === 404) {
+          setError(`Topic '${slug}' not found`);
+        } else {
+          setError('Failed to load articles');
+        }
         setLoading(false);
       });
   }, [slug]);
 
-  if (loading) return <p>Loading articles...</p>;
-  if (error) return <p>{error}</p>;
-
-  return (
-    <main>
-      <div className="container">
-        <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-          <div className="header-left">
-          <BackButton />
-          <h2>Articles on {slug.charAt(0).toUpperCase() + slug.slice(1)}</h2>
+  if (loading) return <p className="loading-message">Loading...</p>;
+  
+  if (error) {
+    return (
+      <main>
+        <div className="container">
+          <div className="error-container">
+            <div className="header-left">
+              <BackButton />
+              <h2>Error</h2>
+            </div>
+            <p className="error-message">{error}</p>
+          </div>
         </div>
-        </div>
-        {articles.length > 0 ? (
-          articles.map((article) => (
-            <ArticleCard key={article.article_id} article={article} />
-          ))
-        ) : (
-          <p>No articles found for this topic.</p>
-        )}
-      </div>
-    </main>
-  );
+      </main>
+    );
+  }
 }
 
 export default TopicsPage;
