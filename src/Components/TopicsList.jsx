@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchTopics } from '../api';
 import { Link } from 'react-router-dom';
-import BackButton from './Backbutton';
+import BackButton from './BackButton';
 
 const TopicsList = () => {
   const [topics, setTopics] = useState([]);
@@ -29,10 +29,12 @@ const TopicsList = () => {
   return (
     <main>
       <div className="container">
-        <div className="page-header" style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+        <div className="page-header">
+          <div className="header-left">
           <BackButton />
           <h2>Topics</h2>
         </div>
+          </div>
         <ul className="topics-list">
           {topics.map((topic) => (
             <li key={topic.slug}>
